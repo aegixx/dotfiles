@@ -1,0 +1,42 @@
+"*":
+  "activate-power-mode":
+    comboMode:
+      opacity: 0.4
+      streakTimeout: 3
+    screenShake:
+      enabled: false
+  "atom-beautify":
+    general:
+      _analyticsUserId: "49d93e01-6f3e-46a5-a8b7-bedd339b7b45"
+    ruby: {}
+  core:
+    disabledPackages: [
+      "minimap"
+      "markdown-preview"
+    ]
+    projectHome: "/Users/bryanstone/projects"
+    telemetryConsent: "limited"
+    themes: [
+      "atom-dark-ui"
+      "atom-dark-syntax"
+    ]
+  editor: {}
+  "exception-reporting":
+    userId: "acca8ce8-2b39-4f42-2640-054ea60a15c1"
+  "go-config": {}
+  "go-plus":
+    panelDisplayMode: "closed"
+  linter: {}
+  "linter-tidy": {}
+  minimap:
+    displayMinimapOnLeft: true
+  "remark-lint":
+    "maximum-line-length": false
+  "split-diff":
+    diffWords: true
+    ignoreWhitespace: true
+    leftEditorColor: "red"
+    rightEditorColor: "green"
+    syncHorizontalScroll: true
+  welcome:
+    showOnStartup: false
