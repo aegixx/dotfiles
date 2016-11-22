@@ -27,7 +27,7 @@ md-preview() {
 	cat $1 | pandoc -f markdown_github | browser
 }
 
-kube-use() {
+kuse() {
   export KUBE_NAMESPACE=$1
 }
 
@@ -39,22 +39,23 @@ ksh() {
   fi
 }
 
-kube-rm() {
-	if [ "$#" -gt 0 ]; then
-		for ns in $(kubectl get namespaces -o jsonpath="{.items[*].metadata.name}" | grep -v kube-system); do
-			echo $ns
-			kubectl delete svc,deployment,rs,rc,po,configmaps,jobs,pv,pvc,petset "$*" --namespace $ns -l "app notin (helm),provider notin (kubernetes)"
-		done
-	else
-		echo "Must supply a selector"
-	fi
-}
-
 k() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
     kubectl --namespace $KUBE_NAMESPACE "$@"
   else
     kubectl "$@"
+  fi
+}
+
+kswitch() {
+  kubectl config use-context $1
+}
+
+kwatch() {
+  if [ -z $1 ]; then
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
+  else
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --namespace $1"
   fi
 }
 
