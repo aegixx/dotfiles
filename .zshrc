@@ -12,9 +12,17 @@ export GOPATH=~/projects/go
 export KOPS_STATE_STORE=s3://oscar-ai-k8s-dev
 export PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
 
+# Preferred editor for local and remote sessions
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR=`which atom`
+fi
+
 alias ls="ls -G"
 alias ll="ls -AlhG"
 alias t="tree"
+alias e="$EDITOR"
 alias truncate="cp /dev/null $@"
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 
@@ -53,9 +61,9 @@ kswitch() {
 
 kwatch() {
   if [ -z $1 ]; then
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pv,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
   else
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --namespace $1"
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pv,pvc -o wide --no-headers=true --namespace $1"
   fi
 }
 
@@ -118,12 +126,5 @@ COMPLETION_WAITING_DOTS="true"
 plugins=(cp aws gpg-agent chucknorris sudo jsontools colorize rvm themes osx screen git vagrant brew ruby jira knife battery web-search command-not-found docker kubectl)
 
 source $ZSH/oh-my-zsh.sh
-
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
-else
-  export EDITOR=`which atom`
-fi
 
 export PATH="$PATH:$HOME/bin:$HOME/.rvm/bin"
