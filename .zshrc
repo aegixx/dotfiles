@@ -1,11 +1,10 @@
 source ~/.iterm2_shell_integration.`basename $SHELL`
-source ~/projects/knowledge/clusters/utilities.sh
 source ~/.zshrc_protected
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 export KUBECONFIG=~/.kube/config:`find ~/.kube/conf.d -type f | tr '\n' ':'`
 export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
-export GOPATH=~/projects/go
+export GOPATH=~/go
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 [[ -s "$(brew --prefix dvm)/dvm.sh" ]] && source "$(brew --prefix dvm)/dvm.sh"
@@ -41,9 +40,9 @@ kuse() {
 
 ksh() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
-    kubectl --namespace $KUBE_NAMESPACE exec -it "$1" bash
+    kubectl --namespace $KUBE_NAMESPACE exec -it $@ bash
   else
-    kubectl exec -it "$1" bash
+    kubectl exec -it $@ bash
   fi
 }
 
@@ -61,9 +60,9 @@ kswitch() {
 
 kwatch() {
   if [ -z $1 ]; then
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pv,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
   else
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pv,pvc -o wide --no-headers=true --namespace $1"
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --namespace $1"
   fi
 }
 
@@ -105,7 +104,7 @@ daemon-wait() {
 alias docker-gc="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc"
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/bryanstone/.oh-my-zsh
+export ZSH=~/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
