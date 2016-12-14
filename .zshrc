@@ -15,13 +15,15 @@ export PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR=`which atom`
+  export EDITOR="`which atom` -a"
 fi
+export GIT_EDITOR="vim"
 
 alias ls="ls -G"
 alias ll="ls -AlhG"
 alias t="tree"
 alias e="$EDITOR"
+alias edit="e"
 alias truncate="cp /dev/null $@"
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 
@@ -54,6 +56,14 @@ k() {
   fi
 }
 
+kport() {
+  if [ $# -gt 1 ]; then
+      while kubectl --namespace $KUBE_NAMESPACE port-forward $1 $2 &>> /dev/null; do :; done &
+  else
+    echo "USAGE: kport [pod] [port]"
+  fi
+}
+
 kswitch() {
   kubectl config use-context $1
 }
@@ -63,6 +73,14 @@ kwatch() {
     watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
   else
     watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --namespace $1"
+  fi
+}
+
+kevent() {
+  if [ -z $1 ]; then
+    while kubectl get ev --watch-only --all-namespaces --no-headers -o wide ; do :; done
+  else
+    while kubectl --namespace $1 get ev --watch-only --no-headers -o wide ; do :; done
   fi
 }
 
