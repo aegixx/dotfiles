@@ -27,6 +27,11 @@ alias edit="e"
 alias truncate="cp /dev/null $@"
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 
+docker-rm-all() {
+  echo "COMMAND: docker ps -aq | xargs docker rm -fv"
+  docker ps -aq | xargs docker rm -fv
+}
+
 git-upstream() {
   echo git fetch ${1=upstream} && git fetch ${1=upstream}
   echo git rebase ${1=upstream}/${2=master} && git rebase ${1=upstream}/${2=master}
