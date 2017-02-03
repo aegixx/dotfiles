@@ -81,9 +81,13 @@ kswitch() {
 
 kwatch() {
   if [ -z $1 ]; then
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
+    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,petsets,jobs,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system\""
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,jobs,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
   else
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,rs,svc,pvc -o wide --no-headers=true --namespace $1"
+    NS=$1
+    shift 1
+    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,petsets,jobs,rs,svc,pvc -o wide --no-headers=true --namespace $NS $@\""
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,jobs,rs,svc,pvc -o wide --no-headers=true --namespace $NS $@"
   fi
 }
 
