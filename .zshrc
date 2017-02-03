@@ -33,8 +33,8 @@ docker-rm-all() {
 }
 
 git-upstream() {
-  echo git fetch ${1=upstream} && git fetch ${1=upstream}
-  echo git rebase ${1=upstream}/${2=master} && git rebase ${1=upstream}/${2=master}
+  echo "git fetch ${1=upstream}" && git fetch ${1=upstream}
+  echo "git rebase ${1=upstream}/${2=master}" && git rebase ${1=upstream}/${2=master}
 }
 
 md-preview() {
@@ -47,22 +47,27 @@ kuse() {
 
 ksh() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
+    echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE exec -it $@ bash"
     kubectl --namespace $KUBE_NAMESPACE exec -it $@ bash
   else
+    echo "COMMAND: kubectl exec -it $@ bash"
     kubectl exec -it $@ bash
   fi
 }
 
 k() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
+    echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE "$@""
     kubectl --namespace $KUBE_NAMESPACE "$@"
   else
+    echo "COMMAND: kubectl "$@""
     kubectl "$@"
   fi
 }
 
 kport() {
   if [ $# -gt 1 ]; then
+      echo "COMMAND: while kubectl --namespace $KUBE_NAMESPACE port-forward $1 $2 &>> /dev/null; do :; done &"
       while kubectl --namespace $KUBE_NAMESPACE port-forward $1 $2 &>> /dev/null; do :; done &
   else
     echo "USAGE: kport [pod] [port]"
@@ -70,6 +75,7 @@ kport() {
 }
 
 kswitch() {
+  echo "COMMAND: kubectl config use-context $1"
   kubectl config use-context $1
 }
 
@@ -83,8 +89,10 @@ kwatch() {
 
 kevent() {
   if [ -z $1 ]; then
+    echo "COMMAND: while kubectl get ev --watch-only --all-namespaces --no-headers -o wide ; do :; done"
     while kubectl get ev --watch-only --all-namespaces --no-headers -o wide ; do :; done
   else
+    echo "COMMAND: while kubectl --namespace $1 get ev --watch-only --no-headers -o wide ; do :; done"
     while kubectl --namespace $1 get ev --watch-only --no-headers -o wide ; do :; done
   fi
 }
