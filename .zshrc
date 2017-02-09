@@ -15,9 +15,10 @@ export PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR="`which atom` -a"
+  export EDITOR="`which atom` -aw"
 fi
-export GIT_EDITOR="vim"
+export GIT_EDITOR="`which atom` -aw"
+export KUBE_EDITOR="`which atom` -aw"
 
 alias ls="ls -G"
 alias ll="ls -AlhG"
