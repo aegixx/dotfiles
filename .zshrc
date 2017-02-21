@@ -162,4 +162,4 @@ plugins=(cp aws gpg-agent chucknorris sudo jsontools colorize rvm themes osx scr
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH="$PATH:$HOME/bin:$HOME/.rvm/bin"
+export PATH="$PATH:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin"
