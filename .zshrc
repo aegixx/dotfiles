@@ -8,8 +8,9 @@ export GOPATH=~/go
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 [[ -s "$(brew --prefix dvm)/dvm.sh" ]] && source "$(brew --prefix dvm)/dvm.sh"
-export KOPS_STATE_STORE=s3://oscar-ai-k8s-dev
+export KOPS_STATE_STORE=s3://kops-oscar-ai
 export PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
+export ECR_SANDBOX=bstone
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -28,9 +29,19 @@ alias edit="e"
 alias truncate="cp /dev/null $@"
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 
+docker-last() {
+  echo "docker run -it --entrypoint /bin/sh $(docker images -aq | head -1)"
+  docker run -it --entrypoint /bin/sh $(docker images -aq | head -1)
+}
+
 docker-rm-all() {
   echo "COMMAND: docker ps -aq | xargs docker rm -fv"
   docker ps -aq | xargs docker rm -fv
+}
+
+docker-rmi-all() {
+  echo "COMMAND: docker images -aq | xargs docker rmi -fv"
+  docker images -aq | xargs docker rmi -f
 }
 
 git-upstream() {
@@ -75,6 +86,11 @@ kport() {
   fi
 }
 
+klog() {
+  echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE logs $@"
+  kubectl --namespace $KUBE_NAMESPACE logs $@
+}
+
 kswitch() {
   echo "COMMAND: kubectl config use-context $1"
   kubectl config use-context $1
@@ -82,13 +98,13 @@ kswitch() {
 
 kwatch() {
   if [ -z $1 ]; then
-    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,petsets,jobs,configmap,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system\""
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,jobs,configmap,rs,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
+    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system\""
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc.svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
   else
     NS=$1
     shift 1
-    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,petsets,jobs,configmap,rs,svc,pvc -o wide --no-headers=true --namespace $NS $@\""
-    watch -ct "kubectl get po,ds,deploy,hpa,ing,petsets,jobs,configmap,rs,svc,pvc -o wide --no-headers=true --namespace $NS $@"
+    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc,svc,pvc -o wide --no-headers=true --namespace $NS $@\""
+    watch -ct "kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc,svc,pvc -o wide --no-headers=true --namespace $NS $@"
   fi
 }
 
@@ -126,7 +142,7 @@ daemon-wait() {
     fi
 
     echo "Waiting on $1:$2 to be listening..."
-		while ! nc -z $1 $2 > /dev/null 2>&1; do
+		while ! nc -z $1 $2 &>> /dev/null; do
       sleep 0.5
     done
 		shift 2
@@ -137,7 +153,10 @@ daemon-wait() {
   fi
 }
 
-alias docker-gc="docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc"
+docker-gc() {
+  docker pull spotify/docker-gc &>> /dev/null
+  docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc
+}
 
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
