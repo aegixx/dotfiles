@@ -6,11 +6,12 @@ export KUBECONFIG=~/.kube/config:`find ~/.kube/conf.d -type f | tr '\n' ':'`
 export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 export GOPATH=~/go
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 [[ -s "$(brew --prefix dvm)/dvm.sh" ]] && source "$(brew --prefix dvm)/dvm.sh"
-export KOPS_STATE_STORE=s3://kops-oscar-ai
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 export PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
 export ECR_SANDBOX=bstone
+
+# $(aws ecr get-login) &>> /dev/null
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -28,6 +29,8 @@ alias e="$EDITOR"
 alias edit="e"
 alias truncate="cp /dev/null $@"
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
+alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test rails db:drop db:create db:migrate db:seed"
+alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | awk '{print $2}'`"
 
 docker-last() {
   echo "docker run -it --entrypoint /bin/sh $(docker images -aq | head -1)"
@@ -115,6 +118,20 @@ kevent() {
   else
     echo "COMMAND: while kubectl --namespace $1 get ev --watch-only --no-headers -o wide ; do :; done"
     while kubectl --namespace $1 get ev --watch-only --no-headers -o wide ; do :; done
+  fi
+}ll
+
+ksecret() {
+  if [ $# -lt 3 ]; then
+    echo "USAGE: ksecret <secret_name> <old-ns> <new-ns>"
+  else
+    SECRET_NAME=$1
+    OLD_NS=$2
+    NEW_NS=$3
+    echo "COMMAND: kubectl --namespace $OLD_NS get secret $SECRET_NAME -o json | jq '{apiVersion,data,kind,type} + {metadata: (.metadata | { name: (.name)})}' | kubectl --namespace $NEW_NS create -f -"
+    kubectl --namespace $OLD_NS get secret docker-trebuchetdev-com -o json | jq '{apiVersion,data,kind,type} + {metadata: (.metadata | { name: (.name)})}' | kubectl --namespace $NEW_NS create -f -
+    echo "COMMAND: kubectl --namespace $NEW_NS patch serviceaccount default -p '{\"imagePullSecrets\": [{\"name\": \"$SECRET_NAME\"}]}'"
+    kubectl --namespace $NEW_NS patch serviceaccount default -p '{"imagePullSecrets": [{"name": "$SECRET_NAME"}]}'
   fi
 }
 
