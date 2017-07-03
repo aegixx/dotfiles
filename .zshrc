@@ -119,7 +119,7 @@ kevent() {
     echo "COMMAND: while kubectl --namespace $1 get ev --watch-only --no-headers -o wide ; do :; done"
     while kubectl --namespace $1 get ev --watch-only --no-headers -o wide ; do :; done
   fi
-}ll
+}
 
 ksecret() {
   if [ $# -lt 3 ]; then
@@ -199,3 +199,40 @@ plugins=(cp aws gpg-agent chucknorris sudo jsontools colorize rvm themes osx scr
 source $ZSH/oh-my-zsh.sh
 
 export PATH="$PATH:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin"
+
+unalias gc
+gc() {
+  echo "COMMAND: git commit -asm \"$1\""
+  git commit -asm "$1"
+}
+
+unalias gpu
+gpu() {
+  echo "COMMAND: git push upstream HEAD:${1:-master}"
+  git push upstream HEAD:${1:-master}
+}
+
+function splat-pull ()
+{
+  docker pull ${SPLAT_IMAGE}
+}
+
+function splat ()
+{
+  WORKDIR=~/.splat/$(basename $PWD)
+
+  docker run -it --rm \
+    -e HOME=/home \
+    -v ${HOME}:/home \
+    -v ${PWD}:${WORKDIR} \
+    -v /etc/group:/etc/group:ro \
+    -v /etc/passwd:/etc/passwd:ro \
+    -w ${WORKDIR} \
+    --env-file <(env | grep "^SPLAT_") \
+    -e DEBUG=${DEBUG} \
+    -e NODE_DEBUG=${NODE_DEBUG} \
+    --user=$(id -u) \
+    ${SPLAT_IMAGE} "$@"
+}
+
+source <(helm completion zsh)
