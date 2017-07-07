@@ -31,6 +31,7 @@ alias truncate="cp /dev/null $@"
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test rails db:drop db:create db:migrate db:seed"
 alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | awk '{print $2}'`"
+alias gs="git status"
 
 docker-last() {
   echo "docker run -it --entrypoint /bin/sh $(docker images -aq | head -1)"
@@ -90,8 +91,8 @@ kport() {
 }
 
 klog() {
-  echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE logs $@"
-  kubectl --namespace $KUBE_NAMESPACE logs $@
+  echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true -f $@"
+  kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true -f $@
 }
 
 kswitch() {
@@ -143,19 +144,6 @@ daemon-wait() {
       private_ip=$1
     elif arp $1 2> /dev/null | grep -Eq "[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}"; then
       private_ip=$1
-    else
-      echo "Locating $1 via AWS CLI..."
-      local vals=$(get-instance-detail $1)
-      read -r -a vals <<< "$vals"
-      local profile="${vals[0]}"
-      local instance_id="${vals[1]}"
-      private_ip="${vals[2]}"
-      if [ -z $profile ]; then
-        echo "ERROR: $1 could not be located"
-        return 1
-      else
-        echo "  Found $private_ip ($profile)"
-      fi
     fi
 
     echo "Waiting on $1:$2 to be listening..."
