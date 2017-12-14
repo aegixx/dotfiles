@@ -1,42 +1,64 @@
 "*":
-  "activate-power-mode":
-    comboMode:
-      opacity: 0.4
-      streakTimeout: 3
-    screenShake:
-      enabled: false
-  "atom-beautify":
-    general:
-      _analyticsUserId: "49d93e01-6f3e-46a5-a8b7-bedd339b7b45"
-    ruby: {}
+  "autocomplete-python":
+    useKite: false
   core:
+    allowPendingPaneItems: false
     disabledPackages: [
-      "minimap"
-      "markdown-preview"
+      "tester-go"
+      "keybinding-resolver"
+      "spell-check"
+      "welcome"
+      "color-picker"
     ]
-    projectHome: "/Users/bryanstone/projects"
-    telemetryConsent: "limited"
-    themes: [
-      "atom-dark-ui"
-      "atom-dark-syntax"
+    packagesWithKeymapsDisabled: [
+      "markdown-writer"
     ]
-  editor: {}
+    projectHome: "/Users/bryan.stone/projects"
+    telemetryConsent: "no"
+  editor:
+    fontSize: 10
+    showIndentGuide: true
+    tabType: "soft"
   "exception-reporting":
-    userId: "acca8ce8-2b39-4f42-2640-054ea60a15c1"
-  "go-config": {}
-  "go-plus":
-    panelDisplayMode: "closed"
+    userId: "70af8ffe-0366-33c2-05d2-7698295e6335"
+  "git-diff":
+    showIconsInEditorGutter: true
+  "goto-definition": {}
   linter: {}
-  "linter-tidy": {}
+  "linter-terraform-syntax": {}
+  "linter-ui-default": {}
+  "markdown-writer":
+    fileExtension: ".md"
+    relativeImagePath: true
   minimap:
-    displayMinimapOnLeft: true
-  "remark-lint":
-    "maximum-line-length": false
-  "split-diff":
-    diffWords: true
-    ignoreWhitespace: true
-    leftEditorColor: "red"
-    rightEditorColor: "green"
-    syncHorizontalScroll: true
+    plugins:
+      cursorline: true
+      cursorlineDecorationsZIndex: 0
+      "find-and-replace": true
+      "find-and-replaceDecorationsZIndex": 0
+      "git-diff": true
+      "git-diffDecorationsZIndex": 0
+      "highlight-selected": true
+      "highlight-selectedDecorationsZIndex": 0
+      linter: true
+      linterDecorationsZIndex: 0
+      "minimap-autohide": true
+      "minimap-autohideDecorationsZIndex": 0
+      "minimap-hide": true
+      "minimap-hideDecorationsZIndex": 0
+  "minimap-git-diff":
+    useGutterDecoration: true
+  "platformio-ide-terminal":
+    toggles:
+      autoClose: true
+  "terraform-fmt": {}
+  "tree-view": {}
+  "tree-view-git-status":
+    gitFlow:
+      display_type: 2
   welcome:
     showOnStartup: false
+".python.source":
+  editor:
+    showIndentGuide: true
+    showInvisibles: false

@@ -3,7 +3,7 @@ source ~/.zshrc_protected
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 export KUBECONFIG=~/.kube/config:`find ~/.kube/conf.d -type f | tr '\n' ':'`
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export JAVA_HOME=`/usr/libexec/java_home -v 9`
 export GOPATH=~/go
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 [[ -s "$(brew --prefix dvm)/dvm.sh" ]] && source "$(brew --prefix dvm)/dvm.sh"
@@ -32,6 +32,14 @@ alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test rails db:drop db:create db:migrate db:seed"
 alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | awk '{print $2}'`"
 alias gs="git status"
+alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+alias a.="atom -a ${1:-.}"
+
+git-release-notes() {
+  TAG=${1:-$(git describe --tags --abbrev=0)}
+  echo "Changes since ${TAG}"
+  git log ${TAG}..HEAD --oneline | grep -v Merge | xargs -l echo '*'
+}
 
 docker-last() {
   echo "docker run -it --entrypoint /bin/sh $(docker images -aq | head -1)"
@@ -71,10 +79,30 @@ ksh() {
   fi
 }
 
+krun() {
+  NAME=bas
+  KUBE_NAMESPACE=${KUBE_NAMESPACE:-default}
+
+  kubectl delete -n $KUBE_NAMESPACE deploy/$NAME &> /dev/null
+
+  IMAGE=docker.trebuchetdev.com/lme-tester
+  CMD=/bin/sh
+  if [ $# -gt 1 ]; then
+    IMAGE=$1
+    shift 1
+    CMD=$@
+  elif [ $# -gt 0 ]; then
+    CMD=$@
+  fi
+  echo "COMMAND: kubectl run --quiet -n $KUBE_NAMESPACE bas -i --tty --rm --image=$IMAGE -- $CMD"
+  kubectl run --quiet -n $KUBE_NAMESPACE bas -i --tty --rm --image=$IMAGE -- $CMD
+  kubectl delete -n $KUBE_NAMESPACE deploy/$NAME &> /dev/null
+}
+
 k() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
-    echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE "$@""
-    kubectl --namespace $KUBE_NAMESPACE "$@"
+    echo "COMMAND: kubectl -n $KUBE_NAMESPACE "$@""
+    kubectl -n $KUBE_NAMESPACE "$@"
   else
     echo "COMMAND: kubectl "$@""
     kubectl "$@"
@@ -91,8 +119,22 @@ kport() {
 }
 
 klog() {
-  echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true -f $@"
-  kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true -f $@
+  echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true --since=1h kuse-f $@"
+  kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true --since=1h -f $@
+}
+
+ktail() {
+  echo "COMMAND: kubetail --namespace $KUBE_NAMESPACE --timestamps --since 1h $@"
+  kubetail --namespace $KUBE_NAMESPACE --timestamps --since 1h $@
+}
+
+klogin() {
+  CLUSTER_NAME=$1
+  touch ~/.kube/conf.d/$CLUSTER_NAME
+  mv -f ~/.kube/config ~/.kube/config.backup
+  ln -s ~/.kube/conf.d/$CLUSTER_NAME ~/.kube/config
+  echo "COMMAND: kube-login --cluster $CLUSTER_NAME"
+  kube-login --cluster $CLUSTER_NAME
 }
 
 kswitch() {
@@ -163,6 +205,15 @@ docker-gc() {
   docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc
 }
 
+docker-cleanup() {
+  echo "Cleaning containers..."
+  docker ps -aq | xargs docker rm -fv
+  echo "Cleaning volumes..."
+  docker volume ls -qf dangling=true | xargs docker volume rm
+  echo "Cleaning networks..."
+  docker network ls -q | xargs docker network rm
+}
+
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -182,11 +233,12 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(cp aws gpg-agent chucknorris sudo jsontools colorize rvm themes osx screen git vagrant brew ruby jira knife battery web-search command-not-found docker kubectl)
+plugins=(cp aws gpg-agent sudo jsontools colorize rvm themes osx screen git vagrant brew ruby jira battery web-search command-not-found docker kubectl docker-compose)
 
 source $ZSH/oh-my-zsh.sh
 
 export PATH="$PATH:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin"
+export PATH="/usr/local/sbin:$PATH"
 
 unalias gc
 gc() {
@@ -223,4 +275,5 @@ function splat ()
     ${SPLAT_IMAGE} "$@"
 }
 
+unalias k
 source <(helm completion zsh)
