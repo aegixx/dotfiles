@@ -1,4 +1,10 @@
 "*":
+  "atom-beautify":
+    cpp:
+      default_beautifier: "clang-format"
+  "atom-ide-ui":
+    use:
+      "atom-ide-diagnostics-ui": false
   "autocomplete-python":
     useKite: false
   core:
@@ -16,7 +22,7 @@
     projectHome: "/Users/bryan.stone/projects"
     telemetryConsent: "no"
   editor:
-    fontSize: 10
+    fontSize: 11
     showIndentGuide: true
     tabType: "soft"
   "exception-reporting":
@@ -49,8 +55,40 @@
   "minimap-git-diff":
     useGutterDecoration: true
   "platformio-ide-terminal":
+    ansiColors:
+      normal:
+        blue: "#0224c7"
+        cyan: "#00c6c8"
+        green: "#00c300"
+        magenta: "#ca31c7"
+        red: "#c91b00"
+        white: "#c7c7c7"
+        yellow: "#c6c400"
+      zBright:
+        brightBlack: "#686868"
+        brightBlue: "#6872ff"
+        brightCyan: "#60fdff"
+        brightGreen: "#5ffa67"
+        brightMagenta: "#ff77ff"
+        brightRed: "#ff6d67"
+        brightYellow: "#fffc67"
+    core:
+      mapTerminalsTo: "Folder"
+      mapTerminalsToAutoOpen: true
+    iconColors:
+      blue: "#0224c7"
+      cyan: "#00c5c8"
+      green: "#00c300"
+      magenta: "#ca31c7"
+      orange: "#ffcc4f"
+      pink: "#ff8ad8"
+      purple: "#9437ff"
+      red: "#ff2600"
+    style:
+      theme: "solarized-dark"
     toggles:
       autoClose: true
+      selectToCopy: false
   "terraform-fmt": {}
   "tree-view": {}
   "tree-view-git-status":

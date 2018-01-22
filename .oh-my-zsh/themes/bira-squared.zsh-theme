@@ -131,8 +131,8 @@ custom_precmd () {
 }
 
 setopt prompt_subst
-PROMPT="╰─%{$fg[yellow]%}⚡%{$reset_color%} "
-PS2="  %{$fg[yellow]%}⚡%{$reset_color%} "
+PROMPT="╰─%{$fg[yellow]%}%1{$emoji[high_voltage_sign]%}%{$reset_color%}  "
+PS2="  %{$fg[yellow]%}%1{$emoji[high_voltage_sign]%}%{$reset_color%}  "
 RPROMPT='${return_code}'
 
 autoload -U add-zsh-hook
