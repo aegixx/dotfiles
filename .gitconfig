@@ -1,0 +1,8 @@
+[user]
+	name = Bryan Stone
+	email = bstone@datapipe.com
+[core]
+	excludesfile = /Users/bryan.stone/.gitignore
+[credential]
+	helper = !aws --profile mvw codecommit credential-helper $@
+	UseHttpPath = true
