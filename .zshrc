@@ -233,7 +233,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(cp aws gpg-agent sudo jsontools colorize rvm themes osx screen git vagrant brew ruby jira battery web-search command-not-found docker kubectl docker-compose emoji)
+plugins=(cp aws gpg-agent sudo jsontools colorize rvm themes osx screen git vagrant brew ruby jira battery web-search command-not-found docker kubectl docker-compose emoji zsh-autosuggestions)
 
 source $ZSH/oh-my-zsh.sh
 
