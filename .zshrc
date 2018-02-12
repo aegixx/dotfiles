@@ -10,6 +10,7 @@ export GOPATH=~/go
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
 export PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
 export ECR_SANDBOX=bstone
+export AWS_CREDENTIAL_FILE=~/.aws/credentials
 
 # $(aws ecr get-login) &>> /dev/null
 
@@ -34,6 +35,11 @@ alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | aw
 alias gs="git status"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 alias a.="atom -a ${1:-.}"
+
+kstatus() {
+  echo "COMMAND: watch -ctd \"kubectl get appstatus --all-namespaces -o json | jq -jr '.items[] | (.metadata | \"\(.namespace) | \(.name)\"), (.spec.charts[] | \"| \(.name) | \(.status) | \(.output)\n\")' | sort -t'|' -k4 | column -c $(tput cols) -t -s '|'\""
+  watch -ctd "kubectl get appstatus --all-namespaces -o json | jq -jr '.items[] | (.metadata | \"\(.namespace) | \(.name)\"), (.spec.charts[] | \"| \(.name) | \(.status) | \(.output)\n\")' | sort -t'|' -k4 | column -c $(tput cols) -t -s '|'"
+}
 
 git-release-notes() {
   TAG=${1:-$(git describe --tags --abbrev=0)}
@@ -119,8 +125,8 @@ kport() {
 }
 
 klog() {
-  echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true --since=1h kuse-f $@"
-  kubectl --namespace $KUBE_NAMESPACE logs --timestamps=true --since=1h -f $@
+  echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE logs --timestamps --since=1h -f $@"
+  kubectl --namespace $KUBE_NAMESPACE logs --timestamps --since=1h -f $@
 }
 
 ktail() {
@@ -144,7 +150,7 @@ kswitch() {
 
 kwatch() {
   if [ -z $1 ]; then
-    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc,svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system\""
+    echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc,svc,pvc,crd -o wide --no-headers=true --all-namespaces | grep -v ^kube-system\""
     watch -ct "kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc.svc,pvc -o wide --no-headers=true --all-namespaces | grep -v ^kube-system"
   else
     NS=$1
@@ -212,6 +218,77 @@ docker-cleanup() {
   docker volume ls -qf dangling=true | xargs docker volume rm
   echo "Cleaning networks..."
   docker network ls -q | xargs docker network rm
+}
+
+# Fetch 24-hour AWS STS session token and set appropriate environment variables.
+# See http://docs.aws.amazon.com/cli/latest/reference/sts/get-session-token.html .
+# You must have jq installed and in your PATH https://stedolan.github.io/jq/ .
+# Add this function to your .bashrc or save it to a file and source that file from .bashrc .
+# https://gist.github.com/ddgenome/f13f15dd01fb88538dd6fac8c7e73f8c
+#
+# usage: aws-creds MFA_TOKEN [OTHER_AWS_STS_GET-SESSION-TOKEN_OPTIONS...]
+function aws-creds () {
+    local pkg=aws-creds
+    if [[ ! $1 ]]; then
+        echo "$pkg: missing required argument: MFA_TOKEN" 1>&2
+        return 99
+    fi
+
+    export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+    local iam_user
+    if [[ $AWS_IAM_USER ]]; then
+        iam_user=$AWS_IAM_USER
+    else
+        iam_user=bstone
+        # if [[ $? -ne 0 || ! $iam_user ]]; then
+        #     echo "$pkg: failed to set IAM user: $iam_user"
+        #     return 10
+        # fi
+    fi
+    local aws_account
+    if [[ $AWS_ACCOUNT ]]; then
+        aws_account=$AWS_ACCOUNT
+    else
+        aws_account=999569188625
+    fi
+
+    local aws_profile
+    if [[ $AWS_PROFILE ]]; then
+        aws_profile=$AWS_PROFILE
+    else
+        aws_profile=dp-admin
+    fi
+
+    local rv creds_json
+    creds_json=$(aws --profile $aws_profile --output json sts get-session-token --duration-seconds 86400 --serial-number "arn:aws:iam::$aws_account:mfa/$iam_user" --token-code "$@")
+    rv="$?"
+    if [[ $rv -ne 0 || ! $creds_json ]]; then
+        echo "$pkg: failed to get credentials for user '$iam_user' account '$aws_account': $creds_json" 1>&2
+        return "$rv"
+    fi
+
+    AWS_ACCESS_KEY_ID=$(echo "$creds_json" | jq -er .Credentials.AccessKeyId)
+    rv="$?"
+    if [[ $rv -ne 0 || ! $AWS_ACCESS_KEY_ID ]]; then
+        echo "$pkg: failed to parse output for AWS_ACCESS_KEY_ID: $creds_json" 1>&2
+        return "$rv"
+    fi
+    AWS_SECRET_ACCESS_KEY=$(echo "$creds_json" | jq -er .Credentials.SecretAccessKey)
+    rv="$?"
+    if [[ $rv -ne 0 || ! $AWS_SECRET_ACCESS_KEY ]]; then
+        echo "$pkg: failed to parse output for AWS_SECRET_ACCESS_KEY: $creds_json" 1>&2
+        return "$rv"
+    fi
+    AWS_SESSION_TOKEN=$(echo "$creds_json" | jq -er .Credentials.SessionToken)
+    rv="$?"
+    if [[ $rv -ne 0 || ! $AWS_SESSION_TOKEN ]]; then
+        echo "$pkg: failed to parse output for AWS_SESSION_TOKEN: $creds_json" 1>&2
+        return "$rv"
+    fi
+
+    export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+
+    echo "AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID; AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY; AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN; export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN"
 }
 
 # Path to your oh-my-zsh installation.

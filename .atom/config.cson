@@ -2,6 +2,8 @@
   "atom-beautify":
     cpp:
       default_beautifier: "clang-format"
+    markdown:
+      default_beautifier: "Remark"
   "atom-ide-ui":
     use:
       "atom-ide-diagnostics-ui": false
@@ -15,6 +17,8 @@
       "spell-check"
       "welcome"
       "color-picker"
+      "language-gfm"
+      "markdown-scroll-sync"
     ]
     packagesWithKeymapsDisabled: [
       "markdown-writer"
@@ -32,7 +36,8 @@
   "goto-definition": {}
   linter: {}
   "linter-terraform-syntax": {}
-  "linter-ui-default": {}
+  "linter-ui-default":
+    showPanel: true
   "markdown-writer":
     fileExtension: ".md"
     relativeImagePath: true
@@ -89,6 +94,12 @@
     toggles:
       autoClose: true
       selectToCopy: false
+  "split-diff":
+    diffWords: true
+    ignoreWhitespace: true
+    leftEditorColor: "red"
+    rightEditorColor: "green"
+    scrollSyncType: "Vertical + Horizontal"
   "terraform-fmt": {}
   "tree-view": {}
   "tree-view-git-status":
@@ -96,6 +107,9 @@
       display_type: 2
   welcome:
     showOnStartup: false
+".md.text":
+  whitespace:
+    removeTrailingWhitespace: false
 ".python.source":
   editor:
     showIndentGuide: true
