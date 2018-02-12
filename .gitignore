@@ -4,3 +4,4 @@
 CVS/
 *.log
 .aws/credentials
+.zshrc_protected

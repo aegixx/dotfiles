@@ -36,8 +36,7 @@
   "goto-definition": {}
   linter: {}
   "linter-terraform-syntax": {}
-  "linter-ui-default":
-    showPanel: true
+  "linter-ui-default": {}
   "markdown-writer":
     fileExtension: ".md"
     relativeImagePath: true
