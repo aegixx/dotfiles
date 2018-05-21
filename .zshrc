@@ -3,7 +3,7 @@ source ~/.zshrc_protected
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # export KUBECONFIG=~/.kube/config:`find ~/.kube/conf.d -type f | tr '\n' ':'`
-export JAVA_HOME=`/usr/libexec/java_home -v 9`
+export JAVA_HOME=`/usr/libexec/java_home -v 10`
 export GOPATH=~/go
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 [[ -s "$(brew --prefix dvm)/dvm.sh" ]] && source "$(brew --prefix dvm)/dvm.sh"

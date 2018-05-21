@@ -12,6 +12,7 @@
       "atom-ide-code-highlight": "default"
       "atom-ide-console": "default"
       "atom-ide-datatip": "default"
+      "atom-ide-debugger": "default"
       "atom-ide-definitions": "default"
       "atom-ide-diagnostics": "default"
       "atom-ide-diagnostics-ui": "never"
@@ -19,6 +20,7 @@
       "atom-ide-global": "default"
       "atom-ide-outline-view": "default"
       "atom-ide-signature-help": "default"
+      "atom-ide-terminal": "default"
       hyperclick: "default"
   "autocomplete-python":
     useKite: false
@@ -39,17 +41,24 @@
     projectHome: "/Users/bryan.stone/projects"
     telemetryConsent: "no"
   editor:
-    fontSize: 10
     showIndentGuide: true
     tabType: "soft"
   "exception-reporting":
     userId: "70af8ffe-0366-33c2-05d2-7698295e6335"
   "git-diff":
     showIconsInEditorGutter: true
+  "go-debug":
+    clearOutputOnStart: true
+    panelInitialVisible: true
+  "go-plus":
+    config: {}
+    format: {}
   "goto-definition": {}
   linter: {}
   "linter-terraform-syntax": {}
   "linter-ui-default": {}
+  "markdown-preview":
+    breakOnSingleNewline: true
   "markdown-writer":
     fileExtension: ".md"
     relativeImagePath: true
@@ -89,9 +98,7 @@
         brightMagenta: "#ff77ff"
         brightRed: "#ff6d67"
         brightYellow: "#fffc67"
-    core:
-      mapTerminalsTo: "Folder"
-      mapTerminalsToAutoOpen: true
+    core: {}
     iconColors:
       blue: "#0224c7"
       cyan: "#00c5c8"
@@ -105,6 +112,7 @@
       theme: "solarized-dark"
     toggles:
       autoClose: true
+      runInsertedText: false
       selectToCopy: false
   "split-diff":
     diffWords: true
