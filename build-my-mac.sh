@@ -4,6 +4,8 @@ brew tap caskroom/drivers
 brew tap caskroom/versions
 
 brew cask install \
+bit-slicer \
+aws-vault \
 intellij-idea-ce \
 steam \
 tower \
@@ -70,7 +72,6 @@ zsh-syntax-highlighting \
 gpg \
 awscli \
 awsebcli \
-aws-keychain \
 awslogs \
 aws-elasticbeanstalk \
 jq \
