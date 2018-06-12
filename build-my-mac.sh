@@ -4,6 +4,7 @@ brew tap caskroom/drivers
 brew tap caskroom/versions
 
 brew cask install \
+viscosity \
 bit-slicer \
 aws-vault \
 intellij-idea-ce \
