@@ -53,7 +53,8 @@ bitbar \
 battle-net \
 microsoft-intellitype \
 intel-power-gadget \
-hazeover
+hazeover \
+gimp
 
 brew install \
 htop \
