@@ -1,9 +1,19 @@
 "*":
   "atom-beautify":
+    bash: {}
     cpp:
       default_beautifier: "clang-format"
+    html: {}
+    java: {}
+    js:
+      indent_size: 4
+    json: {}
     markdown:
       default_beautifier: "Remark"
+    nginx:
+      dontJoinCurlyBracet: false
+    xml: {}
+    yaml: {}
   "atom-ide-ui":
     use:
       "atom-ide-busy-signal": "default"
@@ -31,9 +41,9 @@
       "keybinding-resolver"
       "spell-check"
       "welcome"
-      "color-picker"
       "language-gfm"
-      "markdown-scroll-sync"
+      "open-on-github"
+      "github"
     ]
     packagesWithKeymapsDisabled: [
       "markdown-writer"
@@ -55,8 +65,12 @@
     format: {}
   "goto-definition": {}
   linter: {}
+  "linter-javac":
+    additionalJavacOptions: "-J-Dfile.encoding=UTF-8"
   "linter-terraform-syntax": {}
-  "linter-ui-default": {}
+  "linter-ui-default":
+    panelHeight: 249
+    showPanel: true
   "markdown-preview":
     breakOnSingleNewline: true
   "markdown-writer":
@@ -121,7 +135,9 @@
     rightEditorColor: "green"
     scrollSyncType: "Vertical + Horizontal"
   "terraform-fmt": {}
-  "tree-view": {}
+  "tree-view":
+    autoReveal: true
+    focusOnReveal: false
   "tree-view-git-status":
     gitFlow:
       display_type: 2

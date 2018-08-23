@@ -62,6 +62,25 @@ docker-rmi-all() {
   docker images -aq | xargs docker rmi -f
 }
 
+docker-sh() {
+  echo "COMMAND: docker exec -it $1 ${2:-bash}"
+  docker exec -it $1 ${2:-bash}
+}
+
+docker-gc() {
+  docker pull spotify/docker-gc &>> /dev/null
+  docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc
+}
+
+docker-cleanup() {
+  echo "Cleaning containers..."
+  docker ps -aq | xargs docker rm -fv
+  echo "Cleaning volumes..."
+  docker volume ls -qf dangling=true | xargs docker volume rm
+  echo "Cleaning networks..."
+  docker network ls -q | xargs docker network rm
+}
+
 git-upstream() {
   echo "git fetch ${1=upstream}" && git fetch ${1=upstream}
   echo "git rebase ${1=upstream}/${2=master}" && git rebase ${1=upstream}/${2=master}
@@ -206,20 +225,6 @@ daemon-wait() {
   fi
 }
 
-docker-gc() {
-  docker pull spotify/docker-gc &>> /dev/null
-  docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc
-}
-
-docker-cleanup() {
-  echo "Cleaning containers..."
-  docker ps -aq | xargs docker rm -fv
-  echo "Cleaning volumes..."
-  docker volume ls -qf dangling=true | xargs docker volume rm
-  echo "Cleaning networks..."
-  docker network ls -q | xargs docker network rm
-}
-
 # Fetch 24-hour AWS STS session token and set appropriate environment variables.
 # See http://docs.aws.amazon.com/cli/latest/reference/sts/get-session-token.html .
 # You must have jq installed and in your PATH https://stedolan.github.io/jq/ .
@@ -354,3 +359,4 @@ function splat ()
 
 unalias k
 source <(helm completion zsh)
+export PATH="/opt/Sencha/Cmd:$PATH"
