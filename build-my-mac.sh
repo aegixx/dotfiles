@@ -1,5 +1,12 @@
 #!/bin/sh
 
+set -o errexit
+
+if [ ! command -v brew >/dev/null 2>&1 ]; then
+	# Install Homebrew
+	/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+fi
+
 brew tap caskroom/drivers
 brew tap caskroom/versions
 
@@ -25,7 +32,6 @@ minikube \
 discord \
 java \
 alfred \
-omnigraffle \
 xmind \
 slack \
 spectacle \
@@ -33,10 +39,7 @@ google-backup-and-sync \
 parallels \
 appcleaner \
 mysqlworkbench \
-league-of-legends \
-microsoft-teams \
 flux \
-lastpass \
 postman \
 logitech-options \
 quicken \
@@ -47,13 +50,9 @@ teamviewer \
 evernote \
 nvidia-geforce-now \
 virtualbox \
-flycut \
 malwarebytes \
 bitbar \
-battle-net \
 microsoft-intellitype \
-intel-power-gadget \
-hazeover \
 gimp
 
 brew install \
@@ -83,23 +82,35 @@ kubernetes-helm \
 jenv \
 php
 
-mas install 926036361 # lastpass
+mas install 497799835  # XCode
+mas install 926036361  # Lastpass
 mas install 1295203466 # Microsoft Remote Desktop
-mas install 410628904 # Wunderlist
+mas install 410628904  # Wunderlist
 mas install 1208561404 # Kaspersky VPN
 mas install 1176895641 # Spark
-mas install 975937182 # Fantastical 2
+mas install 1278508951 # Trello
+mas install 430798174  # Hazeover
+mas install 1142578753 # Omnigraffle
 
 # Zsh
 sudo dscl . -create /Users/$USER UserShell /usr/local/bin/zsh
 # Oh-my-zsh
 sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 # RVM
-\curl -sSL https://get.rvm.io | bash -s stable
+gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+\curl -sSL https://get.rvm.io | bash -s stable --ruby
 
-# Other stuff to add later:
-# https://github.com/welcoMattic/kymsu
+# kymsu (https://github.com/welcoMattic/kymsu)
+git clone git@github.com:welcoMattic/kymsu.git && ( cd kymsu && ./install.sh ) ; rm -rf kymsu
+
 # Kaspersky Internet Security
+wget -O /tmp/kis.dmg https://products.s.kaspersky-labs.com/homeuser/kismac18/18.0.2.60/multilanguage-INT-20180517_134818/kaspersky%20internet%20security.dmg
+sudo hdiutil attach /tmp/kis.dmg
+open /Volumes/Kaspersky\ Internet\ Security/Kaspersky\ Downloader.app
+read \?"Press [Enter] to continue..."
+sudo hdiutil unmount /Volumes/Kaspersky\ Internet\ Security/
+rm /tmp/kis.dmg
+
 
 echo "Copy/Paste the following line to your 'sudoers' file to give yourself sudo access WITHOUT a password:"
 echo "$USER\tALL = (ALL) NOPASSWD: ALL"
