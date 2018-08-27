@@ -111,9 +111,15 @@ read \?"Press [Enter] to continue..."
 sudo hdiutil unmount /Volumes/Kaspersky\ Internet\ Security/
 rm /tmp/kis.dmg
 
+# Linking
+ln -s ~/projects/dotfiles/.oh-my-zsh/custom/plugins/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+ln -s ~/projects/dotfiles/.oh-my-zsh/custom/themes/bira-squared.zsh-theme ~/.oh-my-zsh/custom/themes/bira-squared.zsh-theme
+ln -s ~/projects/dotfiles/.* ~/
 
-echo "Copy/Paste the following line to your 'sudoers' file to give yourself sudo access WITHOUT a password:"
-echo "$USER\tALL = (ALL) NOPASSWD: ALL"
-echo "Press <enter> to begin editing..."
-read
-EDITOR=vi sudo visudo
+SUDOER_LINE="$USER\tALL = (ALL) NOPASSWD: ALL"
+if [ ! sudo fgrep "$SUDOER_LINE" /etc/sudoers ]; then
+  echo "Copy/Paste the following line to your 'sudoers' file to give yourself sudo access WITHOUT a password:"
+  echo "$SUDOER_LINE"
+  read \?"Press [Enter] to continue..."
+  EDITOR=vi sudo visudo
+fi

@@ -34,6 +34,8 @@ alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | aw
 alias gs="git status"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 alias a.="atom -a ${1:-.}"
+alias sysup="kymsu cleanup"
+alias aws-sh="aws-vault exec ${1:-default} $SHELL"
 
 kstatus() {
   echo "COMMAND: watch -ctd \"kubectl get appstatus --all-namespaces -o json | jq -jr '.items[] | (.metadata | \"\(.namespace) | \(.name)\"), (.spec.charts[-1] | \" | \(.name) | \(.status) | \(.output)\n\")' | sort -t'|' -k4 | column -c $(tput cols) -t -s '|'\""
@@ -123,7 +125,6 @@ krun() {
   kubectl delete -n $KUBE_NAMESPACE deploy/$NAME &> /dev/null
 }
 
-unalias k
 k() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
     echo "COMMAND: kubectl -n $KUBE_NAMESPACE "$@""
@@ -263,4 +264,5 @@ gpu() {
   git push upstream HEAD:${1:-master}
 }
 
+unalias k
 source <(helm completion zsh)
