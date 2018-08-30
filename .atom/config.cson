@@ -70,7 +70,6 @@
   "linter-terraform-syntax": {}
   "linter-ui-default":
     panelHeight: 249
-    showPanel: true
   "markdown-preview":
     breakOnSingleNewline: true
   "markdown-writer":

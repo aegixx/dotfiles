@@ -33,9 +33,10 @@ alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test 
 alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | awk '{print $2}'`"
 alias gs="git status"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
-alias a.="atom -a ${1:-.}"
+alias atom="atom -a ${1:-.}"
 alias sysup="kymsu cleanup"
 alias aws-sh="aws-vault exec ${1:-default} $SHELL"
+alias lf-vpn="sshuttle -r bstone@54.191.45.115:50022 10.32.0.0/12 &"
 
 kstatus() {
   echo "COMMAND: watch -ctd \"kubectl get appstatus --all-namespaces -o json | jq -jr '.items[] | (.metadata | \"\(.namespace) | \(.name)\"), (.spec.charts[-1] | \" | \(.name) | \(.status) | \(.output)\n\")' | sort -t'|' -k4 | column -c $(tput cols) -t -s '|'\""
