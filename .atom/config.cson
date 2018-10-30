@@ -5,8 +5,7 @@
       default_beautifier: "clang-format"
     html: {}
     java: {}
-    js:
-      indent_size: 4
+    js: {}
     json: {}
     markdown:
       default_beautifier: "Remark"
@@ -51,6 +50,7 @@
     projectHome: "/Users/bryan.stone/projects"
     telemetryConsent: "no"
   editor:
+    fontSize: 11
     showIndentGuide: true
     tabType: "soft"
   "exception-reporting":

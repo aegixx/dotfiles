@@ -3,7 +3,7 @@ source ~/.zshrc_protected
 if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # export KUBECONFIG=~/.kube/config:`find ~/.kube/conf.d -type f | tr '\n' ':'`
-export JAVA_HOME=`/usr/libexec/java_home -v 10`
+export JAVA_HOME=`/usr/libexec/java_home -v 11`
 export GOPATH=~/go
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 [[ -s "$(brew --prefix dvm)/dvm.sh" ]] && source "$(brew --prefix dvm)/dvm.sh"
@@ -33,10 +33,20 @@ alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test 
 alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | awk '{print $2}'`"
 alias gs="git status"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
-alias atom="atom -a ${1:-.}"
 alias sysup="kymsu cleanup"
 alias aws-sh="aws-vault exec ${1:-default} $SHELL"
 alias lf-vpn="sshuttle -r bstone@54.191.45.115:50022 10.32.0.0/12 &"
+
+a.() {
+  LOC="${1:-.}"
+  if [ -d $LOC ]; then
+    echo "COMMAND: atom -a $LOC"
+    atom -a $LOC
+  else
+    echo "COMMAND: atom $LOC"
+    atom $LOC
+  fi
+}
 
 kstatus() {
   echo "COMMAND: watch -ctd \"kubectl get appstatus --all-namespaces -o json | jq -jr '.items[] | (.metadata | \"\(.namespace) | \(.name)\"), (.spec.charts[-1] | \" | \(.name) | \(.status) | \(.output)\n\")' | sort -t'|' -k4 | column -c $(tput cols) -t -s '|'\""
