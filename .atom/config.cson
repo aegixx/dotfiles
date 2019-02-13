@@ -50,7 +50,7 @@
     projectHome: "/Users/bryan.stone/projects"
     telemetryConsent: "no"
   editor:
-    fontSize: 11
+    fontSize: 9
     showIndentGuide: true
     tabType: "soft"
   "exception-reporting":
@@ -63,13 +63,14 @@
   "go-plus":
     config: {}
     format: {}
+    skipCodeFormatCheck: true
   "goto-definition": {}
   linter: {}
   "linter-javac":
     additionalJavacOptions: "-J-Dfile.encoding=UTF-8"
   "linter-terraform-syntax": {}
   "linter-ui-default":
-    panelHeight: 249
+    panelHeight: 300
   "markdown-preview":
     breakOnSingleNewline: true
   "markdown-writer":

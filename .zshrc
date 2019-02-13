@@ -34,8 +34,8 @@ alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | aw
 alias gs="git status"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 alias sysup="kymsu cleanup"
-alias aws-sh="aws-vault exec ${1:-default} $SHELL"
 alias lf-vpn="sshuttle -r bstone@54.191.45.115:50022 10.32.0.0/12 &"
+alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]"'
 
 a.() {
   LOC="${1:-.}"
@@ -46,6 +46,15 @@ a.() {
     echo "COMMAND: atom $LOC"
     atom $LOC
   fi
+}
+
+aws-sh() {
+  echo "COMMAND: aws-vault exec ${1:-default} $SHELL"
+  aws-vault exec --no-session --assume-role-ttl 1h ${1:-default} $SHELL
+}
+
+aws-tmp() {
+  aws-vault exec --no-session --assume-role-ttl 1h ${1:-default} $SHELL -- -c "echo \"[${2:-default}]\naws_access_key_id=\${AWS_ACCESS_KEY_ID}\naws_secret_access_key=\${AWS_SECRET_ACCESS_KEY}\naws_session_token=\${AWS_SESSION_TOKEN}\" > ~/.aws/credentials"
 }
 
 kstatus() {
@@ -260,8 +269,7 @@ plugins=(cp aws gpg-agent sudo jsontools colorize rvm themes osx screen git vagr
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH="$PATH:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin"
-export PATH="/usr/local/sbin:$PATH"
+export PATH="/usr/local/sbin:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin:$PATH"
 
 unalias gc
 gc() {
@@ -277,3 +285,10 @@ gpu() {
 
 unalias k
 source <(helm completion zsh)
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/sls.zsh
