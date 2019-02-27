@@ -17,10 +17,10 @@ export AWS_CREDENTIAL_FILE=~/.aws/credentials
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR="`which atom` -aw"
+  export EDITOR="`which code` -a"
 fi
-export GIT_EDITOR="`which atom` -aw"
-export KUBE_EDITOR="`which atom` -aw"
+export GIT_EDITOR="`which code` -aw"
+export KUBE_EDITOR="`which code` -aw"
 
 alias ls="ls -G"
 alias ll="ls -AlhG"
@@ -36,17 +36,6 @@ alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 alias sysup="kymsu cleanup"
 alias lf-vpn="sshuttle -r bstone@54.191.45.115:50022 10.32.0.0/12 &"
 alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]"'
-
-a.() {
-  LOC="${1:-.}"
-  if [ -d $LOC ]; then
-    echo "COMMAND: atom -a $LOC"
-    atom -a $LOC
-  else
-    echo "COMMAND: atom $LOC"
-    atom $LOC
-  fi
-}
 
 aws-sh() {
   echo "COMMAND: aws-vault exec ${1:-default} $SHELL"
@@ -145,6 +134,7 @@ krun() {
   kubectl delete -n $KUBE_NAMESPACE deploy/$NAME &> /dev/null
 }
 
+# Fire kubectl command for selected namespace
 k() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
     echo "COMMAND: kubectl -n $KUBE_NAMESPACE "$@""
@@ -155,6 +145,7 @@ k() {
   fi
 }
 
+# Setup background port-forwarding to a specific pod
 kport() {
   if [ $# -gt 1 ]; then
       echo "COMMAND: while kubectl --namespace $KUBE_NAMESPACE port-forward $1 $2 &>> /dev/null; do :; done &"
@@ -174,20 +165,13 @@ ktail() {
   kubetail --namespace $KUBE_NAMESPACE --timestamps --since 1h $@
 }
 
-klogin() {
-  CLUSTER_NAME=$1
-  touch ~/.kube/conf.d/$CLUSTER_NAME
-  mv -f ~/.kube/config ~/.kube/config.backup
-  ln -s ~/.kube/conf.d/$CLUSTER_NAME ~/.kube/config
-  echo "COMMAND: kube-login --cluster $CLUSTER_NAME"
-  kube-login --cluster $CLUSTER_NAME
-}
-
+# Switch namespaces
 kswitch() {
   echo "COMMAND: kubectl config use-context $1"
   kubectl config use-context $1
 }
 
+# Watch K8s resources globally or for a specific namespace
 kwatch() {
   if [ -z $1 ]; then
     echo "COMMAND: watch -ct \"kubectl get po,ds,deploy,hpa,ing,statefulsets,jobs,configmap,rs,rc,svc,pvc,crd -o wide --no-headers=true --all-namespaces | grep -v ^kube-system\""
@@ -200,6 +184,7 @@ kwatch() {
   fi
 }
 
+# Watch events globally or from a specific namespace
 kevent() {
   if [ -z $1 ]; then
     echo "COMMAND: while kubectl get ev --watch-only --all-namespaces --no-headers -o wide ; do :; done"
@@ -210,6 +195,7 @@ kevent() {
   fi
 }
 
+# Migrates K8s secrets from one namespace to another
 ksecret() {
   if [ $# -lt 3 ]; then
     echo "USAGE: ksecret <secret_name> <old-ns> <new-ns>"
@@ -218,13 +204,13 @@ ksecret() {
     OLD_NS=$2
     NEW_NS=$3
     echo "COMMAND: kubectl --namespace $OLD_NS get secret $SECRET_NAME -o json | jq '{apiVersion,data,kind,type} + {metadata: (.metadata | { name: (.name)})}' | kubectl --namespace $NEW_NS create -f -"
-    kubectl --namespace $OLD_NS get secret docker-trebuchetdev-com -o json | jq '{apiVersion,data,kind,type} + {metadata: (.metadata | { name: (.name)})}' | kubectl --namespace $NEW_NS create -f -
+    kubectl --namespace $OLD_NS get secret $SECRET_NAME -o json | jq '{apiVersion,data,kind,type} + {metadata: (.metadata | { name: (.name)})}' | kubectl --namespace $NEW_NS create -f -
     echo "COMMAND: kubectl --namespace $NEW_NS patch serviceaccount default -p '{\"imagePullSecrets\": [{\"name\": \"$SECRET_NAME\"}]}'"
     kubectl --namespace $NEW_NS patch serviceaccount default -p '{"imagePullSecrets": [{"name": "$SECRET_NAME"}]}'
   fi
 }
 
-# Wait for a given host or ip to be listening
+# Wait for a given host or ip to be listening on a specific port
 daemon-wait() {
 	if [ $# -gt 1 ]; then
     local private_ip=

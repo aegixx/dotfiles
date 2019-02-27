@@ -7,3 +7,4 @@ CVS/
 .zshrc_protected
 vendor/
 /.aws/aws-keychain.list.tmp
+/.vscode/extensions
