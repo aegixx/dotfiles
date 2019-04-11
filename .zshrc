@@ -33,12 +33,17 @@ alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test 
 alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | awk '{print $2}'`"
 alias gs="git status"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
-alias sysup="kymsu cleanup"
-alias lf-vpn="sshuttle -r bstone@54.191.45.115:50022 10.32.0.0/12 &"
+alias sysup="brewup; mas upgrade"
 alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]"'
+alias ssh-fwd-ls="sudo lsof -i -n | egrep '\<ssh\>'"
+
+ssh-fwd() {
+  echo "COMMAND: ssh -f $1 -L $3:$2:$3 -N"
+  ssh -f $1 -L $3:$2:$3 -N
+}
 
 aws-sh() {
-  echo "COMMAND: aws-vault exec ${1:-default} $SHELL"
+  echo "COMMAND: aws-vault exec --no-session --assume-role-ttl 1h ${1:-default} $SHELL"
   aws-vault exec --no-session --assume-role-ttl 1h ${1:-default} $SHELL
 }
 
@@ -255,7 +260,7 @@ plugins=(cp aws gpg-agent sudo jsontools colorize rvm themes osx screen git vagr
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH="/usr/local/sbin:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin:$PATH"
+export PATH="/usr/local/sbin:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin:/usr/local/opt/node@8/bin:$PATH"
 
 unalias gc
 gc() {
@@ -271,10 +276,9 @@ gpu() {
 
 unalias k
 source <(helm completion zsh)
-
 # tabtab source for serverless package
 # uninstall by removing these lines or running `tabtab uninstall serverless`
-[[ -f /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/serverless.zsh
+[[ -f /Users/bryan.stone/go/src/github.com/LF-Engineering/LFF/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/bryan.stone/go/src/github.com/LF-Engineering/LFF/node_modules/tabtab/.completions/serverless.zsh
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
-[[ -f /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/bryan.stone/projects/fundspring/node_modules/tabtab/.completions/sls.zsh
+[[ -f /Users/bryan.stone/go/src/github.com/LF-Engineering/LFF/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/bryan.stone/go/src/github.com/LF-Engineering/LFF/node_modules/tabtab/.completions/sls.zsh
