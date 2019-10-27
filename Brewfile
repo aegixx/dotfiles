@@ -6,7 +6,6 @@ tap "homebrew/cask"
 tap "homebrew/core"
 brew "automake"
 brew "aws-elasticbeanstalk"
-brew "python"
 brew "awscli"
 brew "awslogs"
 brew "certbot"
@@ -34,6 +33,7 @@ brew "openssl@1.1"
 brew "php"
 brew "pkg-config"
 brew "postgresql"
+brew "python"
 brew "python@2"
 brew "serverless"
 brew "sshuttle"
@@ -44,7 +44,6 @@ brew "yarn"
 brew "zsh"
 brew "zsh-completions"
 brew "zsh-syntax-highlighting"
-brew "alecthomas/tap/gometalinter"
 cask "adobe-acrobat-reader"
 cask "alfred"
 cask "appcleaner"
@@ -52,13 +51,13 @@ cask "aws-vault"
 cask "battle-net"
 cask "bit-slicer"
 cask "bitbar"
+cask "blitz"
 cask "caffeine"
 cask "cscreen"
 cask "discord"
 cask "docker"
 cask "flux"
 cask "flycut"
-cask "gifox"
 cask "gimp"
 cask "google-backup-and-sync"
 cask "google-chrome"
@@ -68,21 +67,19 @@ cask "iterm2"
 cask "java"
 cask "league-of-legends"
 cask "little-snitch"
-cask "logitech-options"
+# cask "logitech-options"
 # cask "logitech-unifying"
 cask "malwarebytes"
-cask "micro-snitch"
 cask "microsoft-intellitype"
 cask "microsoft-office"
-cask "minikube"
 cask "mysqlworkbench"
 cask "nvidia-geforce-now"
+cask "omnigraffle"
 cask "postman"
 cask "quickbooks-online"
 cask "quicken"
 cask "reflector"
 cask "slack"
-cask "sonos"
 cask "spectacle"
 cask "steam"
 cask "teamviewer"
@@ -90,20 +87,13 @@ cask "tower"
 cask "virtualbox"
 cask "viscosity"
 cask "visual-studio-code"
-cask "vnc-viewer"
-cask "xmind"
-cask "zeplin"
-mas "XCode", id: 497799835
+cask "xmind-zen"
+mas "FileZilla", id: 1458095236
+mas "Gifox", id: 1082624744
+mas "Hazeover", id: 430798174
+mas "iMovie", id: 408981434
 mas "Lastpass", id: 926036361
 mas "Microsoft Remote Desktop", id: 1295203466
-mas "Wunderlist", id: 410628904
+mas "Notability", id: 736189492
 mas "Kaspersky VPN", id: 1208561404
 mas "Spark", id: 1176895641
-mas "Hazeover", id: 430798174
-mas "Omnigraffle", id: 1142578753
-mas "Notability", id: 736189492
-mas "GarageBand", id: 682658836
-mas "iMovie", id: 408981434
-mas "Keynote", id: 409183694
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541

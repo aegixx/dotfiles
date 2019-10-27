@@ -1,26 +1,35 @@
 source ~/.iterm2_shell_integration.`basename $SHELL`
 source ~/.zshrc_protected
-if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+if command -v pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 # export KUBECONFIG=~/.kube/config:`find ~/.kube/conf.d -type f | tr '\n' ':'`
-export JAVA_HOME=`/usr/libexec/java_home -v 11`
-export GOPATH=~/go
+JAVA_HOME=`/usr/libexec/java_home -v 11`
+GOPATH=~/go
 [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
 [[ -s "$(brew --prefix dvm)/dvm.sh" ]] && source "$(brew --prefix dvm)/dvm.sh"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-export PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
-export AWS_CREDENTIAL_FILE=~/.aws/credentials
+PERL5LIB=/usr/local/lib/perl5/site_perl:${PERL5LIB}
+AWS_CREDENTIAL_FILE=~/.aws/credentials
+PATH="/usr/local/opt/openssl/bin:$PATH"
+LDFLAGS="-L/usr/local/opt/openssl/lib"
+CPPFLAGS="-I/usr/local/opt/openssl/include"
+PKG_CONFIG_PATH="/usr/local/opt/openssl/lib/pkgconfig"
 
 # $(aws ecr get-login) &>> /dev/null
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='vim'
+  EDITOR='vim'
 else
-  export EDITOR="`which code` -a"
+  EDITOR="$(command -v code) -a"
 fi
-export GIT_EDITOR="`which code` -aw"
-export KUBE_EDITOR="`which code` -aw"
+GIT_EDITOR="$(command -v code) -aw"
+KUBE_EDITOR="$(command -v code) -aw"
+
+export JAVA_HOME && export GOPATH && export PERL5LIB && \
+export AWS_CREDENTIAL_FILE && export PATH && export LDFLAGS && \
+export CPPFLAGS && export PKG_CONFIG_PATH && export EDITOR && \
+export GIT_EDITOR && export KUBE_EDITOR
 
 alias ls="ls -G"
 alias ll="ls -AlhG"
@@ -30,12 +39,28 @@ alias edit="e"
 alias truncate="cp /dev/null $@"
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test rails db:drop db:create db:migrate db:seed"
-alias killzombies="kill -9 `ps -xaw -o state -o ppid | grep Z | grep -v PID | awk '{print $2}'`"
 alias gs="git status"
-alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+alias brewup='brew update; brew upgrade; brew cleanup; brew doctor'
 alias sysup="brewup; mas upgrade"
 alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]"'
 alias ssh-fwd-ls="sudo lsof -i -n | egrep '\<ssh\>'"
+alias ifconfig="env ifconfig -v \$(env ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active' | egrep -o -m 1 '^[^\t:]+')"
+
+killzombies() {
+  procs=$(pgrep -xaw -o state -o ppid Z | grep -v PID | awk '{print $2}')
+  echo "$procs" | xargs kill -9
+}
+
+zipedit(){
+    echo "Usage: zipedit archive.zip folder/file.txt"
+    curdir=$(pwd)
+    unzip "$1" "$2" -d /tmp 
+    cd /tmp
+    vi "$2" && zip --update "$curdir/$1"  "$2" 
+    # remove this line to just keep overwriting files in /tmp
+    rm -f "$2" # or remove -f if you want to confirm
+    cd "$curdir"
+}
 
 ssh-fwd() {
   echo "COMMAND: ssh -f $1 -L $3:$2:$3 -N"
@@ -48,6 +73,7 @@ aws-sh() {
 }
 
 aws-tmp() {
+  echo "COMMAND: aws-vault exec --no-session --assume-role-ttl 1h ${1:-default} $SHELL -- -c \"echo \\\"[${2:-default}]\\\naws_access_key_id=\\\${AWS_ACCESS_KEY_ID}\\\naws_secret_access_key=\\\${AWS_SECRET_ACCESS_KEY}\\\naws_session_token=\\\${AWS_SESSION_TOKEN}\" > ~/.aws/credentials"
   aws-vault exec --no-session --assume-role-ttl 1h ${1:-default} $SHELL -- -c "echo \"[${2:-default}]\naws_access_key_id=\${AWS_ACCESS_KEY_ID}\naws_secret_access_key=\${AWS_SECRET_ACCESS_KEY}\naws_session_token=\${AWS_SESSION_TOKEN}\" > ~/.aws/credentials"
 }
 
@@ -99,6 +125,11 @@ docker-cleanup() {
 git-upstream() {
   echo "git fetch ${1=upstream}" && git fetch ${1=upstream}
   echo "git rebase ${1=upstream}/${2=master}" && git rebase ${1=upstream}/${2=master}
+}
+
+git-prune() {
+  echo "COMMAND: git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d"
+  git branch -vv | grep 'origin/.*: gone]' | awk '{print $1}' | xargs git branch -d
 }
 
 md-preview() {
@@ -237,6 +268,15 @@ daemon-wait() {
   fi
 }
 
+get-user-profiles() {
+  if [ $# -lt 1 ]; then
+    echo "USAGE: STAGE=prod get-user-profiles <profile-type>"
+  else
+    echo "COMMAND: aws dynamodb scan --table-name jobspring-${STAGE:-prod}-user-profiles --no-paginate | jq -c \".Items[] | select(.type.S==\"$1\") | {name: (.firstName.S + \" \" + .lastName.S), email: .email.S}\" | jq -s '. | unique'"
+    aws dynamodb scan --table-name jobspring-${STAGE:-prod}-user-profiles --no-paginate | jq -c ".Items[] | select(.type.S==\"$1\") | {name: (.firstName.S + \" \" + .lastName.S), email: .email.S}" | jq -s '. | unique'
+  fi
+}
+
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 
@@ -252,7 +292,7 @@ CASE_SENSITIVE="true"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# command -v plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
@@ -260,7 +300,7 @@ plugins=(cp aws gpg-agent sudo jsontools colorize rvm themes osx screen git vagr
 
 source $ZSH/oh-my-zsh.sh
 
-export PATH="/usr/local/sbin:$HOME/bin:$HOME/.rvm/bin:$GOROOT/bin:/usr/local/opt/node@8/bin:$PATH"
+export PATH="/usr/local/sbin:$HOME/bin:$GOPATH/bin:$PATH"
 
 unalias gc
 gc() {
@@ -282,3 +322,8 @@ source <(helm completion zsh)
 # tabtab source for sls package
 # uninstall by removing these lines or running `tabtab uninstall sls`
 [[ -f /Users/bryan.stone/go/src/github.com/LF-Engineering/LFF/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/bryan.stone/go/src/github.com/LF-Engineering/LFF/node_modules/tabtab/.completions/sls.zsh
+
+# tabtab source for slss package
+# uninstall by removing these lines or running `tabtab uninstall slss`
+[[ -f /Users/bryan.stone/node_modules/tabtab/.completions/slss.zsh ]] && . /Users/bryan.stone/node_modules/tabtab/.completions/slss.zsh
+export PATH="/usr/local/opt/openal-soft/bin:$PATH"
