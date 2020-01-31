@@ -1,9 +1,14 @@
+
+# Brew Taps (third-party repos)
 tap "alecthomas/tap"
 tap "caskroom/versions"
 tap "caskroom/drivers"
 tap "homebrew/bundle"
 tap "homebrew/cask"
 tap "homebrew/core"
+
+# Brew Formulas (package installers)
+brew "antigen"
 brew "automake"
 brew "aws-elasticbeanstalk"
 brew "awscli"
@@ -25,6 +30,7 @@ brew "libiconv"
 brew "libxml2"
 brew "libyaml"
 brew "mas"
+brew "moreutils"
 brew "mysql"
 brew "nmap"
 brew "node"
@@ -37,6 +43,7 @@ brew "python"
 brew "python@2"
 brew "serverless"
 brew "sshuttle"
+brew "thefuck"
 brew "tree"
 brew "watch"
 brew "wget"
@@ -44,6 +51,8 @@ brew "yarn"
 brew "zsh"
 brew "zsh-completions"
 brew "zsh-syntax-highlighting"
+
+# Brew Casks (binaries)
 cask "adobe-acrobat-reader"
 cask "alfred"
 cask "appcleaner"
@@ -57,20 +66,17 @@ cask "cscreen"
 cask "discord"
 cask "docker"
 cask "flux"
-cask "flycut"
 cask "gimp"
 cask "google-backup-and-sync"
 cask "google-chrome"
-cask "intellij-idea-ce"
 cask "istat-menus"
 cask "iterm2"
 cask "java"
 cask "league-of-legends"
 cask "little-snitch"
-# cask "logitech-options"
-# cask "logitech-unifying"
+cask "logitech-options"
+cask "logitech-unifying"
 cask "malwarebytes"
-cask "microsoft-intellitype"
 cask "microsoft-office"
 cask "mysqlworkbench"
 cask "nvidia-geforce-now"
@@ -88,6 +94,8 @@ cask "virtualbox"
 cask "viscosity"
 cask "visual-studio-code"
 cask "xmind-zen"
+
+# Mac App Store
 mas "FileZilla", id: 1458095236
 mas "Gifox", id: 1082624744
 mas "Hazeover", id: 430798174
@@ -95,5 +103,5 @@ mas "iMovie", id: 408981434
 mas "Lastpass", id: 926036361
 mas "Microsoft Remote Desktop", id: 1295203466
 mas "Notability", id: 736189492
-mas "Kaspersky VPN", id: 1208561404
 mas "Spark", id: 1176895641
+mas "Fantastical", id: 975937182
