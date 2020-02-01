@@ -3,9 +3,9 @@
 alias ls="ls -G"
 alias ll="ls -AlhG"
 alias t="tree"
-alias e="\$EDITOR"
-alias edit="\$EDITOR"
-alias truncate="cp /dev/null $@"
+alias edit='$(command -v code) -n'
+alias e='edit'
+alias e.='$(command -v code) -a'
 alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
 alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test rails db:drop db:create db:migrate db:seed"
 alias gs="git status"
@@ -15,7 +15,12 @@ alias sysup="brewup; mas upgrade"
 alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]"'
 alias ssh-fwd-ls="sudo lsof -i -n | egrep '\<ssh\>'"
 alias ifconfig="env ifconfig -v \$(env ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active' | egrep -o -m 1 '^[^\t:]+')"
+alias cloudrig="aws-tmp ssbs && (cd \$HOME/projects/cloudRIG/cli && node index)"
 
+truncate() {
+  echo "COMMAND: cp /dev/null '$@'"
+  cp /dev/null "$@"
+}
 killzombies() {
   procs=$(pgrep -xaw -o state -o ppid Z | grep -v PID | awk '{print $2}')
   echo "$procs" | xargs kill -9
@@ -43,20 +48,20 @@ ssh-fwd() {
 }
 
 aws-sh() {
-  echo "COMMAND: aws-vault exec --assume-role-ttl=1h ${1:-default} $SHELL" >&2
-  aws-vault exec --assume-role-ttl=1h "${1:-default}" "$SHELL"
+  echo "COMMAND: aws-vault exec ${1:-default} $SHELL" >&2
+  aws-vault exec "${1:-default}" "$SHELL"
 }
 
 aws-exec() {
   profile=${1:-default}
   shift 1
-  echo "COMMAND: aws-vault exec --assume-role-ttl=1h $profile aws $@" >&2
-  aws-vault exec --assume-role-ttl 1h "$profile" aws $@
+  echo "COMMAND: aws-vault exec $profile aws $@" >&2
+  aws-vault exec "$profile" aws $@
 }
 
 aws-tmp() {
-  echo "COMMAND: aws-vault exec --no-session --assume-role-ttl=1h ${1:-default} $SHELL -- -c \"echo \\\"[${2:-default}]\\\naws_access_key_id=\\\${AWS_ACCESS_KEY_ID}\\\naws_secret_access_key=\\\${AWS_SECRET_ACCESS_KEY}\\\naws_session_token=\\\${AWS_SESSION_TOKEN}\" > ~/.aws/credentials" >&2
-  aws-vault exec --no-session --assume-role-ttl=1h "${1:-default}" "$SHELL" -- -c "echo \"[${2:-default}]\naws_access_key_id=\${AWS_ACCESS_KEY_ID}\naws_secret_access_key=\${AWS_SECRET_ACCESS_KEY}\naws_session_token=\${AWS_SESSION_TOKEN}\" > ~/.aws/credentials"
+  echo "COMMAND: aws-vault exec --no-session ${1:-default} $SHELL -- -c \"echo \\\"[${2:-default}]\\\naws_access_key_id=\\\${AWS_ACCESS_KEY_ID}\\\naws_secret_access_key=\\\${AWS_SECRET_ACCESS_KEY}\\\naws_session_token=\\\${AWS_SESSION_TOKEN}\" > ~/.aws/credentials" >&2
+  aws-vault exec --no-session "${1:-default}" "$SHELL" -- -c "echo \"[${2:-default}]\naws_access_key_id=\${AWS_ACCESS_KEY_ID}\naws_secret_access_key=\${AWS_SECRET_ACCESS_KEY}\naws_session_token=\${AWS_SESSION_TOKEN}\" > ~/.aws/credentials"
 }
 
 kstatus() {

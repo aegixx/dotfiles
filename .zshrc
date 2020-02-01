@@ -27,5 +27,5 @@ KUBE_EDITOR="$(command -v code) -aw" && export KUBE_EDITOR
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  EDITOR="$(command -v code) -a" && export EDITOR
+  EDITOR="$(command -v code) -n" && export EDITOR
 fi
