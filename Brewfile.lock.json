@@ -5,19 +5,19 @@
         "revision": "454499467ae1c52cd8bd77dd79d75602966c8d5f"
       },
       "caskroom/versions": {
-        "revision": "387371e29c1e21725ab78db11c2f806225bf7cef"
+        "revision": "c433a4615a9f4ea26e62f2f2284cf8c038d12fe2"
       },
       "caskroom/drivers": {
-        "revision": "3d8cc9c2a2c46a337d10cdfa216ddaaee5e59413"
+        "revision": "653efb1c5e7ce3fa73beb20687a3f380e56dc2a0"
       },
       "homebrew/bundle": {
-        "revision": "6d2f307b918355df929b94b4cf5507603e802a21"
+        "revision": "51a69539ad29b8acbcc478b56b7f1054d5b3cce2"
       },
       "homebrew/cask": {
-        "revision": "959836865f73a4a8e21e6aaee1ffb4db5f27c19f"
+        "revision": "20f15ea8be275892e7274547d41ec8e82cb6759e"
       },
       "homebrew/core": {
-        "revision": "7d939679d72595f9f3e982d0d742f1278fd35855"
+        "revision": "2da0dc898a663118daf535515a9d8eb4052e160f"
       }
     },
     "brew": {
@@ -882,131 +882,255 @@
             }
           }
         }
-      }
+      },
+      "github/gh/gh": null
     },
     "cask": {
       "adobe-acrobat-reader": {
-        "version": "19.010.20098"
+        "version": "19.010.20098",
+        "options": {
+          "full_name": "adobe-acrobat-reader"
+        }
       },
       "alfred": {
-        "version": "4.0.4_1111"
+        "version": "4.0.4_1111",
+        "options": {
+          "full_name": "alfred"
+        }
       },
       "appcleaner": {
-        "version": "3.5"
+        "version": "3.5",
+        "options": {
+          "full_name": "appcleaner"
+        }
       },
       "aws-vault": {
-        "version": "5.2.0"
+        "version": "5.2.0",
+        "options": {
+          "full_name": "aws-vault"
+        }
       },
       "battle-net": {
-        "version": "latest"
+        "version": "latest",
+        "options": {
+          "full_name": "battle-net"
+        }
       },
       "bit-slicer": {
-        "version": "1.7.9"
+        "version": "1.7.9",
+        "options": {
+          "full_name": "bit-slicer"
+        }
       },
       "bitbar": {
-        "version": "1.9.2"
+        "version": "1.9.2",
+        "options": {
+          "full_name": "bitbar"
+        }
       },
       "blitz": {
-        "version": "1.3.12"
+        "version": "1.3.12",
+        "options": {
+          "full_name": "blitz"
+        }
       },
       "caffeine": {
-        "version": "1.1.1"
+        "version": "1.1.1",
+        "options": {
+          "full_name": "caffeine"
+        }
       },
       "cscreen": {
-        "version": "2012.09"
+        "version": "2012.09",
+        "options": {
+          "full_name": "cscreen"
+        }
       },
       "discord": {
-        "version": "0.0.255"
+        "version": "0.0.255",
+        "options": {
+          "full_name": "discord"
+        }
       },
       "docker": {
-        "version": "2.0.0.3-ce-mac81,31259"
+        "version": "2.0.0.3-ce-mac81,31259",
+        "options": {
+          "full_name": "docker"
+        }
       },
       "flux": {
-        "version": "39.987"
+        "version": "39.987",
+        "options": {
+          "full_name": "flux"
+        }
       },
       "gimp": {
-        "version": "2.10.14"
+        "version": "2.10.14",
+        "options": {
+          "full_name": "gimp"
+        }
       },
       "google-backup-and-sync": {
-        "version": "latest"
+        "version": "latest",
+        "options": {
+          "full_name": "google-backup-and-sync"
+        }
       },
       "google-chrome": {
-        "version": "73.0.3683.75"
+        "version": "73.0.3683.75",
+        "options": {
+          "full_name": "google-chrome"
+        }
       },
       "istat-menus": {
-        "version": "6.31"
+        "version": "6.31",
+        "options": {
+          "full_name": "istat-menus"
+        }
       },
       "iterm2": {
-        "version": "3.2.7"
+        "version": "3.2.7",
+        "options": {
+          "full_name": "iterm2"
+        }
       },
       "java": {
-        "version": "13.0.2,8:d4173c853231432d94f001e99d882ca7"
+        "version": "13.0.2,8:d4173c853231432d94f001e99d882ca7",
+        "options": {
+          "full_name": "java"
+        }
       },
       "league-of-legends": {
-        "version": "latest"
+        "version": "latest",
+        "options": {
+          "full_name": "league-of-legends"
+        }
       },
       "little-snitch": {
-        "version": "4.3.1"
+        "version": "4.3.1",
+        "options": {
+          "full_name": "little-snitch"
+        }
       },
       "logitech-options": {
-        "version": "7.12.82"
+        "version": "7.12.82",
+        "options": {
+          "full_name": "logitech-options"
+        }
       },
       "logitech-unifying": {
-        "version": "1.3.375"
+        "version": "1.3.375",
+        "options": {
+          "full_name": "logitech-unifying"
+        }
       },
       "malwarebytes": {
-        "version": "3.7.34.2263"
+        "version": "3.7.34.2263",
+        "options": {
+          "full_name": "malwarebytes"
+        }
       },
       "microsoft-office": {
-        "version": "16.23.19030902"
+        "version": "16.23.19030902",
+        "options": {
+          "full_name": "microsoft-office"
+        }
       },
       "mysqlworkbench": {
-        "version": "8.0.19"
+        "version": "8.0.19",
+        "options": {
+          "full_name": "mysqlworkbench"
+        }
       },
       "nvidia-geforce-now": {
-        "version": "2.0.16.148,845620"
+        "version": "2.0.16.148,845620",
+        "options": {
+          "full_name": "nvidia-geforce-now"
+        }
       },
       "omnigraffle": {
-        "version": "7.11.3"
+        "version": "7.11.3",
+        "options": {
+          "full_name": "omnigraffle"
+        }
       },
       "postman": {
-        "version": "7.0.6"
+        "version": "7.0.6",
+        "options": {
+          "full_name": "postman"
+        }
       },
       "quickbooks-online": {
-        "version": "4.0.9-35"
+        "version": "4.0.9-35",
+        "options": {
+          "full_name": "quickbooks-online"
+        }
       },
       "quicken": {
-        "version": "5.14.2,514.31850.100"
+        "version": "5.14.3,514.31897.100",
+        "options": {
+          "full_name": "quicken"
+        }
       },
       "reflector": {
-        "version": "3.2.1"
+        "version": "3.2.1",
+        "options": {
+          "full_name": "reflector"
+        }
       },
       "slack": {
-        "version": "3.3.8"
+        "version": "3.3.8",
+        "options": {
+          "full_name": "slack"
+        }
       },
       "spectacle": {
-        "version": "1.2"
+        "version": "1.2",
+        "options": {
+          "full_name": "spectacle"
+        }
       },
       "steam": {
-        "version": "latest"
+        "version": "latest",
+        "options": {
+          "full_name": "steam"
+        }
       },
       "teamviewer": {
-        "version": "14"
+        "version": "14",
+        "options": {
+          "full_name": "teamviewer"
+        }
       },
       "tower": {
-        "version": "3.3.0-170,3f5b2bee"
+        "version": "3.3.0-170,3f5b2bee",
+        "options": {
+          "full_name": "tower"
+        }
       },
       "virtualbox": {
-        "version": "6.1.2,135662"
+        "version": "6.1.2,135662",
+        "options": {
+          "full_name": "virtualbox"
+        }
       },
       "viscosity": {
-        "version": "1.7.14"
+        "version": "1.7.14",
+        "options": {
+          "full_name": "viscosity"
+        }
       },
       "visual-studio-code": {
-        "version": "1.32.3,a3db5be9b5c6ba46bb7555ec5d60178ecc2eaae4"
+        "version": "1.32.3,a3db5be9b5c6ba46bb7555ec5d60178ecc2eaae4",
+        "options": {
+          "full_name": "visual-studio-code"
+        }
       },
       "xmind-zen": {
-        "version": "10.0.1-202001022222"
+        "version": "10.0.1-202001022222",
+        "options": {
+          "full_name": "xmind-zen"
+        }
       }
     },
     "mas": {
@@ -1038,16 +1162,16 @@
       },
       "Fantastical": {
         "id": "975937182",
-        "version": "3.0.1"
+        "version": "3.0.3"
       }
     }
   },
   "system": {
     "macos": {
       "catalina": {
-        "HOMEBREW_VERSION": "2.2.4-18-gf8a4dd9",
+        "HOMEBREW_VERSION": "2.2.5-9-g87c35ac",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "7d939679d72595f9f3e982d0d742f1278fd35855",
+        "Homebrew/homebrew-core": "2da0dc898a663118daf535515a9d8eb4052e160f",
         "CLT": "11.0.33.17",
         "Xcode": "11.3.1",
         "macOS": "10.15.3"
