@@ -6,10 +6,10 @@ alias t="tree"
 alias edit='$(command -v code) -n'
 alias e='edit'
 alias e.='$(command -v code) -a'
-alias listening="sudo lsof -nP -iTCP -sTCP:LISTEN"
+alias listening="lsof -nP -iTCP -sTCP:LISTEN"
 alias rails-reset="rails db:drop db:create db:migrate db:seed && RAILS_ENV=test rails db:drop db:create db:migrate db:seed"
 alias gs="git status"
-alias gp="git push"
+alias gp="git push --follow-tags"
 alias brewup='brew update; brew upgrade; brew cleanup; brew doctor'
 alias sysup="brewup; mas upgrade"
 alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]"'

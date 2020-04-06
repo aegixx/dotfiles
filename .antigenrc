@@ -17,6 +17,7 @@ antigen bundle ng
 antigen bundle kubectl
 antigen bundle vscode
 antigen bundle docker
+antigen bundle nvm
 antigen bundle djui/alias-tips
 antigen bundle mafredri/zsh-async
 antigen bundle zsh-users/zsh-syntax-highlighting
