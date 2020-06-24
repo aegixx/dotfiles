@@ -11,3 +11,5 @@
 [credential]
 	helper = !aws --profile ssbs codecommit credential-helper $@
 	UseHttpPath = true
+[pull]
+	rebase = true
