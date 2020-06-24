@@ -125,11 +125,11 @@ kuse() {
 
 ksh() {
   if [[ "${KUBE_NAMESPACE}x" != "x" ]]; then
-    echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE exec -it $@ bash"
-    kubectl --namespace "$KUBE_NAMESPACE" exec -it $@ bash
+    echo "COMMAND: kubectl --namespace $KUBE_NAMESPACE exec -it $@ -- bash"
+    kubectl --namespace "$KUBE_NAMESPACE" exec -it $@ -- bash
   else
-    echo "COMMAND: kubectl exec -it $@ bash"
-    kubectl exec -it $@ bash
+    echo "COMMAND: kubectl exec -it $@ -- bash"
+    kubectl exec -it $@ -- bash
   fi
 }
 
@@ -252,12 +252,40 @@ daemon-wait() {
   fi
 }
 
+unalias "gc"
 gc() {
-  echo "COMMAND: git commit -asm \"$1\""
-  git commit -asm "$1"
+  echo "COMMAND: git commit -avsm \"$1\""
+  git commit -avsm "$1"
 }
 
+unalias "gpu"
 gpu() {
   echo "COMMAND: git push upstream HEAD:${1:-master}"
   git push upstream "HEAD:${1:-master}"
+}
+
+minecraft-update() {
+  _RELEASE_DATA=$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest.json)
+  if [[ $1 =~ ^[0-9] ]]; then # If a version reference
+    VERSION="$1"
+    _VERSION_DATA=$(jq -r "[.versions[] | select(.id==\"$VERSION\")][0]" <<< "$_RELEASE_DATA")
+  else
+    TYPE=${1:-release}
+    echo -n "Getting latest '$TYPE'..."
+    _VERSION_DATA=$(jq -r "[.versions[] | select(.type==\"$TYPE\")][0]" <<< "$_RELEASE_DATA")
+    VERSION=$(jq -r '.id' <<< "$_VERSION_DATA")
+  fi
+  MANIFEST_URL=$(jq -r '.url' <<< "$_VERSION_DATA")
+  echo "DONE ($VERSION)"
+  echo -n "Downloading manifest..."
+  _MANIFEST_DATA=$(curl -s "$MANIFEST_URL")
+  echo "DONE"
+  SERVER_URL=$(jq -r '.downloads.server.url' <<< "$_MANIFEST_DATA")
+  echo -n "Downloading server files..."
+  mkdir -p "/usr/local/Caskroom/minecraft-server/$VERSION/"
+  curl -s "$SERVER_URL" -o "/usr/local/Caskroom/minecraft-server/$VERSION/server.jar"
+  echo "DONE"
+  echo -n "Making '$VERSION' active..."
+  sed -i '' "s/\/[^/]*\/server.jar/\/$VERSION\/server.jar/" /usr/local/Caskroom/minecraft-server/minecraft-server.wrapper.sh
+  echo "  DONE"
 }

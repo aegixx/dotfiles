@@ -5,5 +5,8 @@ CVS/
 *.log
 .aws/credentials
 .zshrc_protected
-/.aws/aws-keychain.list.tmp
-/.vscode/extensions
+.aws/aws-keychain.list.tmp
+.vscode/extensions
+.ssh/id_*
+!.ssh/id_*.pub
+Brewfile.lock.json

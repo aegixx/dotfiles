@@ -1,0 +1,24 @@
+{
+	"monaco": {
+		"editorOptions": {
+			"minimap": {
+				"enabled": false
+			},
+			"lineNumbers": "off",
+			"scrollBeyondLastLine": false,
+			"wordWrap": "bounded"
+		}
+	},
+	"sorting": {
+		"by": "date_modified",
+		"type": "descending"
+	},
+	"theme": "light",
+	"tutorial": true,
+	"cwd": "/Users/bryan.stone/Google Drive/Documents/Notes",
+	"Options": {
+		"editor": {
+			"lineNumbers": "on"
+		}
+	}
+}

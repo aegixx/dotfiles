@@ -13,6 +13,7 @@ export ZSH=~/.oh-my-zsh
 export PATH="/usr/local/sbin:$HOME/bin:$GOPATH/bin:$PATH:/usr/local/opt/openssl/bin:/usr/local/opt/openal-soft/bin"
 # KUBECONFIG=~/.kube/config:$(find ~/.kube/conf.d -type f | tr '\n' ':') && export KUBECONFIG
 JAVA_HOME=$(/usr/libexec/java_home -v 11) && export JAVA_HOME
+export PATH_TO_FX=/usr/local/lib/javafx-sdk-14.0.1/lib
 export NVM_DIR="$HOME/.nvm"
 [ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
 [ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
