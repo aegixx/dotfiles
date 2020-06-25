@@ -1,5 +1,6 @@
 # Brew Taps (third-party repos)
 tap "alecthomas/tap"
+tap "github/gh"
 tap "homebrew/bundle"
 tap "homebrew/cask-drivers"
 tap "homebrew/cask-versions"
@@ -106,4 +107,5 @@ mas "iMovie", id: 408981434
 mas "Microsoft Remote Desktop", id: 1295203466
 mas "Microsoft To Do", id: 1274495053
 mas "Notability", id: 736189492
-mas "Spark", id: 1176895641mas "Xcode", id: 497799835
+mas "Spark", id: 1176895641
+mas "Xcode", id: 497799835
