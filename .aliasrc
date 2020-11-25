@@ -15,12 +15,13 @@ alias sysup="brewup; mas upgrade"
 alias uuidgen='uuidgen | tr "[:upper:]" "[:lower:]"'
 alias ssh-fwd-ls="sudo lsof -i -n | egrep '\<ssh\>'"
 alias ifconfig="env ifconfig -v \$(env ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active' | egrep -o -m 1 '^[^\t:]+')"
-alias cloudrig="aws-tmp ssbs && (cd \$HOME/projects/cloudRIG/cli && node index)"
+alias pip="pip3"
 
 truncate() {
   echo "COMMAND: cp /dev/null '$@'"
   cp /dev/null "$@"
 }
+
 killzombies() {
   procs=$(pgrep -xaw -o state -o ppid Z | grep -v PID | awk '{print $2}')
   echo "$procs" | xargs kill -9
@@ -262,30 +263,4 @@ unalias "gpu"
 gpu() {
   echo "COMMAND: git push upstream HEAD:${1:-master}"
   git push upstream "HEAD:${1:-master}"
-}
-
-minecraft-update() {
-  _RELEASE_DATA=$(curl -s https://launchermeta.mojang.com/mc/game/version_manifest.json)
-  if [[ $1 =~ ^[0-9] ]]; then # If a version reference
-    VERSION="$1"
-    _VERSION_DATA=$(jq -r "[.versions[] | select(.id==\"$VERSION\")][0]" <<< "$_RELEASE_DATA")
-  else
-    TYPE=${1:-release}
-    echo -n "Getting latest '$TYPE'..."
-    _VERSION_DATA=$(jq -r "[.versions[] | select(.type==\"$TYPE\")][0]" <<< "$_RELEASE_DATA")
-    VERSION=$(jq -r '.id' <<< "$_VERSION_DATA")
-  fi
-  MANIFEST_URL=$(jq -r '.url' <<< "$_VERSION_DATA")
-  echo "DONE ($VERSION)"
-  echo -n "Downloading manifest..."
-  _MANIFEST_DATA=$(curl -s "$MANIFEST_URL")
-  echo "DONE"
-  SERVER_URL=$(jq -r '.downloads.server.url' <<< "$_MANIFEST_DATA")
-  echo -n "Downloading server files..."
-  mkdir -p "/usr/local/Caskroom/minecraft-server/$VERSION/"
-  curl -s "$SERVER_URL" -o "/usr/local/Caskroom/minecraft-server/$VERSION/server.jar"
-  echo "DONE"
-  echo -n "Making '$VERSION' active..."
-  sed -i '' "s/\/[^/]*\/server.jar/\/$VERSION\/server.jar/" /usr/local/Caskroom/minecraft-server/minecraft-server.wrapper.sh
-  echo "  DONE"
 }

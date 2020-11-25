@@ -1,0 +1,12 @@
+[user]
+	name = Bryan Stone
+	email = stnebry@amazon.com
+[core]
+	excludesfile = /Users/bryan.stone/.gitignore
+[url "git@github.com:"]
+    insteadOf = "https://github.com/"
+
+[http]
+	postBuffer = 1048576000
+[pull]
+	rebase = true

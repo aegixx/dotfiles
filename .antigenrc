@@ -33,9 +33,9 @@ antigen bundle zsh-users/zsh-completions
 antigen bundle zsh-users/zsh-autosuggestions
 antigen bundle zsh-users/zsh-syntax-highlighting
 
-export POWERLEVEL9K_MODE="awesome-patched"
-DEFAULT_USER=$(whoami)
-export DEFAULT_USER
+POWERLEVEL9K_MODE="nerdfont-complete" && export POWERLEVEL9K_MODE
+DEFAULT_USER=$(whoami) && export DEFAULT_USER
+ZSH_THEME="powerlevel10k/powerlevel10k" && export ZSh_THEME
 
 antigen theme https://github.com/romkatv/powerlevel10k powerlevel10k
 

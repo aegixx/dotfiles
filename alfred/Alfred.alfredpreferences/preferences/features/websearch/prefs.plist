@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>customSites</key>
+	<dict>
+		<key>D3C8D499-EFBD-498E-80F2-349F69D099D8</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>amzn</string>
+			<key>text</key>
+			<string>Search Amazon Internal Search for {query}</string>
+			<key>url</key>
+			<string>https://is.amazon.com/search/ALL?q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+		<key>D9A43E0F-2A84-42AB-AEF3-7A137ED33ABF</key>
+		<dict>
+			<key>enabled</key>
+			<true/>
+			<key>keyword</key>
+			<string>sage</string>
+			<key>text</key>
+			<string>Search Amazon Sage for {query}</string>
+			<key>url</key>
+			<string>https://sage.amazon.com/search?q={query}</string>
+			<key>utf8</key>
+			<true/>
+		</dict>
+	</dict>
+	<key>onlyShowEnabledInPrefs</key>
+	<true/>
+</dict>
+</plist>
