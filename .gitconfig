@@ -1,15 +1,22 @@
 [user]
 	name = Bryan Stone
-	email = aegixx@gmail.com
+	email = bryan.stone@pfizer.com
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIP8r5Em80hJuwtRRcqtLMoWxK0tmpuyij3Z7GUB8xhLY
+[gpg]
+	format = ssh
+	program = /opt/homebrew/bin/gpg
+[gpg "ssh"]
+	program = /Applications/1Password.app/Contents/MacOS/op-ssh-sign
+[commit]
+	gpgsign = true
+	template = /Users/bryan.stone/.stCommitMsg
 [core]
-	excludesfile = /Users/bryan.stone/.gitignore
-[url "git@github.com:"]
-    insteadOf = "https://github.com/"
-
-[http]
-	postBuffer = 1048576000
-[credential]
-	helper = !aws --profile ssbs codecommit credential-helper $@
-	UseHttpPath = true
-[pull]
-	rebase = true
+	excludesfile = /Users/bryan.stone/.gitignore_global
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[push]
+	autoSetupRemote = true
